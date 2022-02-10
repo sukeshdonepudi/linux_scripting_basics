@@ -1,0 +1,3 @@
+injectKanisterSidecar:
+    webhookServer:
+          port: 8090

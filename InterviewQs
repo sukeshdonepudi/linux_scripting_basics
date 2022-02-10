@@ -1,0 +1,137 @@
+# Interview Q's
+
+## AWS:
+1. What are the most commons services that you used in AWS
+Ans: EC2, EBS, CloudWatch, S3 Buckets, Route53[DNS solution in AWS], IAM, VPC, CLoudFront.
+
+2. What is EC2, Did you managed them manually or any automated way.
+Ans: 
+- EC2 - Elastic Cloud Compute, is VM in AWS environment. We have different types of EC2 instances in AWS like t2.micro, t2.small, c3.large and etc. 
+- We created EC2 instances based on developer application memory and CPU requirements.
+
+- I worked creating EC2 instances manually and also automated way using ansible-playbooks.
+
+Manual way:
+- Goto AWS console
+- Choose EC2 service and region on the top right corner, where you want to launch instance. Click NEXT
+- Click on create instance and choose instance type[as per dev's requirement]. Click NEXT
+- Select VPC and SUBNET[Private/Public]. Click NEXT
+- Add EBS Volume, if they need extra disks excluding ephemeral storage. Click NEXT
+- Choose keys if you have any or create new key pair which helps to login to the instance, once it is UP and healthy. Click Review and Create.
+
+Automated way:
+- Write ansible playbooks with respective roles and tasks which includes set of steps to spin up EC2 instance in AWS Console.
+
+3. What is a Key pair that you use while creating EC2 instances
+Ans: 
+- It helps us to login to the instance after we created it. Its a .pem or .rdp file.
+- We better save them in a safe place like GitHub or BitBucket[What ever we use]
+
+4. How do you login to a Ubuntu EC2 instance
+Ans: I use SSH to login to EC2 ubuntu insatnce.
+
+
+ssh hostname -i KeyFile (If DNS is configured)
+
+(or)
+
+ssh IPAddress -i KeyFile (If no DNS Configured)
+
+5. If SSH fails while login to EC2 instance, what do you do.
+Ans: I will check, why the instance login fail using -vvv options
+
+Command: 
+ssh IpAddress -i KeyFile -vvv
+
+-vvv : It takes the SSH to debug mode, we can use -v as well.
+
+In debug mode it will give some hints, whether instance is reachable or not. Or if there any issues related keys permissions.
+
+6. Where we keep the SSH keys in your local work station.
+Ans: We store key files in .ssh folder, which located in our home directory[$HOME]
+
+
+7. What is EBS
+Ans: 
+- EBS[ElasticBlock Storage] is a block storage, It stays until we delete from EC2 instance in AWS console.
+- By default EC2 instances comes with ephemeral storage, which is limited to instance[Say 32Gb, 64Gb]. If we want to create a extra disk, we can use EBS service to create an extra disk and attach it to EC2 instances.
+
+8. Why we use S3[Simple Storage Service] buckets. 
+Ans:
+- You can use the S3 interface to store and retrieve any amount of data. It works on payment model is "pay as you go" means no limits for storage.
+- In general we use it for static data[Which is consistanant, no change in data]
+- For few applications, We might need to store more data on daily basis. We use S3 buckets to store the data.
+
+9. Difference between EBS and S3.
+Ans:
+- EBS: Administrator creates it with limited storage[Like 50Gb or 100Gb]. EBS volumes are limited to regions.
+- Where as S3 is unlimited storage and S3 buckets can be shared between the AWS regions.
+
+10. What is a VPC
+Ans:
+- Its a Virtual private cloud. Which helps us to seperate/safeGaurd our AWS resources from OutSide network. 
+
+11. How do we setup VPC
+Ans:
+Create VPC -> 
+Create InternetGW and attach to VPC -> 
+Create public/Private subnets and attach to VPC -> 
+Create routeTables[Default public RT created attach IGW and PublicSubnet, create privateRT and assosiate PrivateSubnet] ->
+Security -> Network ACL & SG 
+
+
+12. What is AutoScaling, where do you setup in AWS console.
+Ans:
+- AutoScaling helps us to increase or descrease EC2 instances in AWS depends on respective resource usage.
+- Some times the CPU or memory usage may grow depends on the traffic on those EC2 instances, We can set the limits on ELB[Elastic Load Balancer]
+- If the CPU or Memory usage is > 80% on the ELB level, it creates a new EC2 instances to overcome the resource shortage issues.
+
+
+13. What is ELB
+Ans: 
+- Elastic Load Balancer
+- It balance or sends the traffic to under lying instances in a round robin way.
+
+14. Why we need to use route53.
+Ans:
+- It a DNS solution in AWS Cloud.
+- We can create DNS records like A, AAAA, TXT, MX etc. in route53.
+- Here 53 is DNS service port number.
+- We can expose our application endpoint with domains to out side world by setting DNS records in AWS.
+
+15. CloudWatch
+Ans:
+- AWS CloudWatch is a monitoring solution that AWS provide to resources.
+- We can monitor and create alerting to our mobiles/emails/Slack channels by usaing AWS SNS[Simple Notification Service] service.
+- We can monitor Ec2 instance health. Whether instance is UP or Down etc.
+
+
+16. CloudFront
+Ans:
+- AWS CloudFront is a CDN service in AWS.
+- It helps keep the static data available at AWS edge data centers, so that data and application pages are accessible with faster response.
+
+
+
+
+
+## ANSIBLE:
+
+1. What is ANSIBLE
+Ans:
+- It is a configuration managemant tool.
+- We can create and update any configuration accross many servers at a time.
+
+2. Which backend mechanism ANSIBLE use.
+Ans:
+- It uses SSH and it is developed in python.
+- If SSH is configured on remote instances to be accessible from your local instance, using ANSIBLE you can make changes as per the requirements.
+
+3. Do we need master and slave servers for ANSIBLE
+Ans:
+- ANSIBLE is agent less, we no need to have master and slave setup.
+- We just need to have SSH setup to use ANSIBLE.
+
+4. How do you run dry run in ANSIBLE
+Ans:
+- We can use --check option to run dryRun in Ansible PlayBook
